@@ -17,6 +17,8 @@
  */
 #define NO_CODE false
 
+#include "util.h"
+
 /* allocate global variables */
 int lineno = 0;
 FILE* source;

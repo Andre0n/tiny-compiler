@@ -8,7 +8,7 @@
 #include "globals.h"
 
 /* set NO_PARSE to 1 to get a scanner-only compiler */
-#define NO_PARSE false
+#define NO_PARSE true
 /* set NO_ANALYZE to 1 to get a parser-only compiler */
 #define NO_ANALYZE false
 
@@ -18,6 +18,9 @@
 #define NO_CODE false
 
 #include "util.h"
+#if NO_PARSE
+#include "scan.h"
+#endif
 
 /* allocate global variables */
 int lineno = 0;

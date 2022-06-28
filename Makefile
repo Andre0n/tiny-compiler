@@ -1,4 +1,4 @@
-cc = gcc -std=c11
+cc = gcc -std=c11 -Isrc/include
 CFLAGS = -Wall -Wextra -pedantic -lm -ldl -fPIC -rdynamic
 CFLAGS_DEBUG = -O0 -fno-builtin -ggdb
 CFLAGS_REALEASE = -O3
@@ -13,7 +13,7 @@ target = tiny
 .PHONY: clean
 
 $(object_dir)/%.o: src/%.c | $(object_dir)
-	@echo [CC] $@
+	@echo [Compiling] $@ $(CFLAGS)
 	@$(cc) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
 
 $(target): $(objects)

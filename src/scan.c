@@ -95,6 +95,7 @@ TokenType getToken(void)
     bool save = true;
     while (state != DONE) {
         int c = getNextChar();
+        save = true;
         switch (state) {
         case START:
             if (isdigit(c)) {

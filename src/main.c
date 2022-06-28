@@ -37,8 +37,29 @@ bool TraceCode = true;
 
 bool Error = false;
 
-int main()
+int main(int argc, char* argv[])
 {
-    printf("Hello, World!\n");
-    return 0;
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <filename.tny>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    char pgm[120];
+    strcpy(pgm, argv[1]);
+    if (strchr(pgm, '.') == NULL) {
+        strcat(pgm, ".tny");
+    }
+    source = fopen(pgm, "r");
+    if (source == NULL) {
+        fprintf(stderr, "File %s not found\n", pgm);
+        exit(EXIT_FAILURE);
+    }
+
+    listing = stdout;
+    fprintf(listing, "\nTINY COMPILATION: %s\n", pgm);
+#if NO_PARSE
+    while (getToken() != ENDFILE)
+        ;
+#endif
+
+    return EXIT_SUCCESS;
 }

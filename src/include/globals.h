@@ -16,7 +16,7 @@
 #include <string.h>
 
 /* MAXRESERVED = the number of reserved words */
-#define MAXRESERVED 13 // Updated for new changes
+#define MAXRESERVED 10 // Updated for new changes
 
 typedef enum
 /* book-keeping tokens */
@@ -33,9 +33,6 @@ typedef enum
   READ,
   WRITE,
   WHILE,
-  SWITCH,
-  CASE,
-  ENDSWITCH,
   /* multicharacter tokens */
   ID,
   NUM,

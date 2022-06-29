@@ -24,6 +24,7 @@
 
 /* allocate global variables */
 int lineno = 0;
+char* filePath;
 FILE* source;
 FILE* listing;
 FILE* code;
@@ -49,6 +50,7 @@ int main(int argc, char* argv[])
         strcat(pgm, ".tny");
     }
     source = fopen(pgm, "r");
+    filePath = pgm;
     if (source == NULL) {
         fprintf(stderr, "File %s not found\n", pgm);
         exit(EXIT_FAILURE);

@@ -218,13 +218,14 @@ void printTree(TreeNode* tree)
 
 void freeTree(TreeNode* tree)
 {
-    while (tree) {
+    TreeNode* cur = tree;
+    while (cur != NULL) {
         for (int i = 0; i < MAXCHILDREN; i++) {
-            free(tree->child[i]);
+            free(cur->child[i]);
         }
-        tree = tree->sibling;
+        cur = cur->sibling;
     }
-    if (tree) {
+    if (tree != NULL) {
         free(tree);
     }
 }

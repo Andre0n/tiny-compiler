@@ -74,7 +74,6 @@ int main(int argc, char* argv[])
         fprintf(listing, "\nSyntax tree:\n");
         printTree(syntaxTree);
     }
-    freeTree(syntaxTree);
 #if !NO_ANALYZE
     if (!Error) {
         if (TraceAnalyze) {
@@ -91,6 +90,6 @@ int main(int argc, char* argv[])
     }
 #endif
 #endif
-
+    freeTree(syntaxTree);
     return EXIT_SUCCESS;
 }

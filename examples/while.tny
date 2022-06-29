@@ -1,0 +1,5 @@
+val := 0;
+while val < 10 
+    write fact;
+    val := val + 1;
+endwhile

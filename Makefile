@@ -1,5 +1,5 @@
 cc = gcc -std=c11 -Isrc/include
-CFLAGS = -Wall -Wextra -pedantic -lm -ldl -fPIC -rdynamic
+CFLAGS = -Wall -Wextra -pedantic -lm -ldl -fPIC -rdynamic -Werror
 CFLAGS_DEBUG = -O0 -fno-builtin -ggdb
 CFLAGS_REALEASE = -O3
 

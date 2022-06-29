@@ -50,9 +50,10 @@ typedef enum
   DDOT,
 } TokenType;
 
-extern FILE* source;  /* source code text file */
-extern FILE* listing; /* listing output text file */
-extern FILE* code;    /* code text file for TM simulator */
+extern char* filePath; /* file path name */
+extern FILE* source;   /* source code text file */
+extern FILE* listing;  /* listing output text file */
+extern FILE* code;     /* code text file for TM simulator */
 
 extern int lineno; /* source line number for listing */
 

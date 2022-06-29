@@ -92,10 +92,9 @@ TokenType getToken(void)
     /* current state - always begins at START */
     StateType state = START;
     /* flag to indicate save to tokenString */
-    bool save = true;
     while (state != DONE) {
         int c = getNextChar();
-        save = true;
+        bool save = true;
         switch (state) {
         case START:
             if (isdigit(c)) {

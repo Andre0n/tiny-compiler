@@ -22,6 +22,9 @@
 #include "scan.h"
 #else
 #include "parse.h"
+#if !NO_ANALYZE
+#include "analyze.h"
+#endif
 #endif
 
 /* allocate global variables */
@@ -72,6 +75,21 @@ int main(int argc, char* argv[])
         printTree(syntaxTree);
     }
     freeTree(syntaxTree);
+#if !NO_ANALYZE
+    if (!Error) {
+        if (TraceAnalyze) {
+            fprintf(listing, "\nBuilding Symbol Table...\n");
+        }
+        buildSymtab(syntaxTree);
+        if (TraceAnalyze) {
+            fprintf(listing, "\nChecking Types...\n");
+        }
+        typeCheck(syntaxTree);
+        if (TraceAnalyze) {
+            fprintf(listing, "\nType Checking Finished\n");
+        }
+    }
+#endif
 #endif
 
     return EXIT_SUCCESS;

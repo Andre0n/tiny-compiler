@@ -8,7 +8,7 @@
 #include "globals.h"
 
 /* set NO_PARSE to 1 to get a scanner-only compiler */
-#define NO_PARSE true
+#define NO_PARSE false
 /* set NO_ANALYZE to 1 to get a parser-only compiler */
 #define NO_ANALYZE false
 
@@ -20,6 +20,8 @@
 #include "util.h"
 #if NO_PARSE
 #include "scan.h"
+#else
+#include "parse.h"
 #endif
 
 /* allocate global variables */
@@ -30,7 +32,7 @@ FILE* listing;
 FILE* code;
 
 /* allocate and set tracing flags */
-bool EchoSource = true;
+bool EchoSource = false;
 bool TraceScan = true;
 bool TraceParse = true;
 bool TraceAnalyze = true;
@@ -59,8 +61,17 @@ int main(int argc, char* argv[])
     listing = stdout;
     fprintf(listing, "\nTINY COMPILATION: %s\n", pgm);
 #if NO_PARSE
-    while (getToken() != ENDFILE)
-        ;
+    while (getToken() != ENDFILE) {
+        continue;
+    }
+#else
+    TreeNode* syntaxTree;
+    syntaxTree = parse();
+    if (TraceParse && !Error) {
+        fprintf(listing, "\nSyntax tree:\n");
+        printTree(syntaxTree);
+    }
+    freeTree(syntaxTree);
 #endif
 
     return EXIT_SUCCESS;

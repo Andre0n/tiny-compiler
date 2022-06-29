@@ -221,7 +221,7 @@ void freeTree(TreeNode* tree)
     TreeNode* cur = tree;
     while (cur != NULL) {
         for (int i = 0; i < MAXCHILDREN; i++) {
-            free(cur->child[i]);
+            freeTree(cur->child[i]);
         }
         cur = cur->sibling;
     }

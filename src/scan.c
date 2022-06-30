@@ -5,7 +5,7 @@
 /* Kenneth C. Louden                                */
 /****************************************************/
 
-#include "scan.h"
+#include "include/scan.h"
 
 /* states in scanner DFA */
 typedef enum { START, INASSIGN, INCOMMENT, INNUM, INID, DONE } StateType;

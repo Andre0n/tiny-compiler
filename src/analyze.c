@@ -6,7 +6,7 @@
 /* Kenneth C. Louden                                */
 /****************************************************/
 
-#include "analyze.h"
+#include "include/analyze.h"
 
 /* counter for variable memory locations */
 static int location = 0;

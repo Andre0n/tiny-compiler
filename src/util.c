@@ -6,7 +6,7 @@
 /* Kenneth C. Louden                                */
 /****************************************************/
 
-#include "util.h"
+#include "include/util.h"
 
 /* Procedure printToken prints a token
  * and its lexeme to the listing file

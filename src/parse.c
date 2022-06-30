@@ -5,8 +5,7 @@
 /* Kenneth C. Louden                                */
 /****************************************************/
 
-#include "parse.h"
-#include "include/util.h"
+#include "include/parse.h"
 
 static TokenType currentToken; /* holds current token */
 

@@ -19,7 +19,7 @@ static TreeNode* assign_stmt();
 static TreeNode* read_stmt();
 static TreeNode* write_stmt();
 static TreeNode* while_stmt();
-static TreeNode* exp();
+static TreeNode* expr();
 static TreeNode* simple_exp();
 static TreeNode* term();
 static TreeNode* factor();
@@ -117,7 +117,7 @@ TreeNode* if_stmt()
     TreeNode* stmt = newStmtNode(IfK);
     match(IF);
     if (stmt != NULL) {
-        stmt->child[0] = exp();
+        stmt->child[0] = expr();
     }
     match(THEN);
     if (stmt != NULL) {
@@ -144,7 +144,7 @@ TreeNode* repeat_stmt()
     match(REPEAT);
     stmt->child[0] = stmt_sequence();
     match(UNTIL);
-    stmt->child[1] = exp();
+    stmt->child[1] = expr();
     return stmt;
 }
 
@@ -153,7 +153,7 @@ TreeNode* while_stmt()
     TreeNode* stmt = newStmtNode(WhileK);
     match(WHILE);
     if (stmt != NULL) {
-        stmt->child[0] = exp();
+        stmt->child[0] = expr();
         stmt->child[1] = stmt_sequence();
     }
     match(ENDWHILE);
@@ -169,7 +169,7 @@ TreeNode* assign_stmt()
     match(ID);
     match(ASSIGN);
     if (stmt != NULL) {
-        stmt->child[0] = exp();
+        stmt->child[0] = expr();
     }
     return stmt;
 }
@@ -190,12 +190,12 @@ TreeNode* write_stmt()
     TreeNode* stmt = newStmtNode(WriteK);
     match(WRITE);
     if (stmt != NULL) {
-        stmt->child[0] = exp();
+        stmt->child[0] = expr();
     }
     return stmt;
 }
 
-TreeNode* exp()
+TreeNode* expr()
 {
     TreeNode* ex = simple_exp();
     if ((currentToken == LT) || (currentToken == EQ)) {
@@ -265,7 +265,7 @@ TreeNode* factor()
         break;
     case LPAREN:
         match(LPAREN);
-        t = exp();
+        t = expr();
         match(RPAREN);
         break;
     case ENDFILE:

@@ -17,18 +17,19 @@ static int location = 0;
  * in postorder to tree pointed to by t
  */
 
-static void traverse(TreeNode* t, void (*preProc)(),
-                     void (*postProc)(TreeNode*))
+static void traverse(TreeNode* t, void (*preProc)(TreeNode* t),
+                     void (*postProc)(TreeNode* t))
 {
     if (t == NULL) {
         return;
     }
-    preProc();
+    preProc(t);
     for (int i = 0; i < MAXCHILDREN; i++) {
         traverse(t->child[i], preProc, postProc);
     }
     postProc(t);
     traverse(t->sibling, preProc, postProc);
+    return;
 }
 
 /* nullProc is a do-nothing procedure to
@@ -43,9 +44,6 @@ static void nullProc() { return; }
  */
 static void insertNode(TreeNode* t)
 {
-    if (t == NULL) {
-        return;
-    }
     switch (t->nodekind) {
     case StmtK:
         switch (t->kind.stmt) {
@@ -93,6 +91,9 @@ static void insertNode(TreeNode* t)
  */
 void buildSymtab(TreeNode* tree)
 {
+    if (tree == NULL) {
+        return;
+    }
     traverse(tree, insertNode, nullProc);
     if (TraceAnalyze) {
         fprintf(listing, "\nSymbol table:\n\n");

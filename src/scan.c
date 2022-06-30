@@ -91,7 +91,11 @@ TokenType getToken(void)
     TokenType currentToken = ENDFILE;
     /* current state - always begins at START */
     StateType state = START;
-    /* flag to indicate save to tokenString */
+    /* Solving `[-Wstringop-overflow]` write a byte in size 0
+    /* holds the current `tokenString` temporarily.
+    */
+    char tokenLexeme[MAXTOKENLEN + 1] = "";
+
     while (state != DONE) {
         int c = getNextChar();
         bool save = true;
@@ -198,13 +202,16 @@ TokenType getToken(void)
             break;
         }
         if ((save) && (tokenStringIndex <= MAXTOKENLEN)) {
-            tokenString[tokenStringIndex++] = (char)c;
+            char tmp[] = {(char)c, '\0'};
+            strcat(tokenLexeme, tmp);
+            tokenStringIndex++;
         }
         if (state == DONE) {
-            tokenString[tokenStringIndex] = '\0';
+            strcpy(tokenString, tokenLexeme);
             if (currentToken == ID) {
                 currentToken = reservedLookup(tokenString);
             }
+            memset(tokenLexeme, 0, MAXTOKENLEN);
         }
     }
     if (TraceScan) {

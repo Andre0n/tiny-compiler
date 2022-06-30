@@ -91,9 +91,9 @@ TokenType getToken(void)
     TokenType currentToken = ENDFILE;
     /* current state - always begins at START */
     StateType state = START;
-    /* Solving `[-Wstringop-overflow]` write a byte in size 0
-    /* holds the current `tokenString` temporarily.
-    */
+
+    // Solving `[-Wstringop - overflow]` write a byte in size 0
+    /* holds the current `tokenString` temporarily. */
     char tokenLexeme[MAXTOKENLEN + 1] = "";
 
     while (state != DONE) {

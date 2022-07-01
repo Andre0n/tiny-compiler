@@ -37,10 +37,10 @@ static int getNextChar(void)
             linepos = 0;
             return lineBuf[linepos++];
         }
-            EOF_flag = true;
-            return EOF;
-        }
-        return lineBuf[linepos++];
+        EOF_flag = true;
+        return EOF;
+    }
+    return lineBuf[linepos++];
 }
 
 /* ungetNextChar backtracks one character
@@ -81,7 +81,8 @@ static TokenType reservedLookup(char* word)
  * next token in source file
  */
 TokenType getToken(void)
-{ /* index for storing into tokenString */
+{
+    /* index for storing into tokenString */
     int tokenStringIndex = 0;
     /* holds current token to be returned */
     TokenType currentToken = ENDFILE;

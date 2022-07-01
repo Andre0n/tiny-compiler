@@ -53,22 +53,32 @@ static void ungetNextChar(void)
 }
 
 /* lookup table of reserved words */
-static struct {
+static struct resWord {
     char* str;
     TokenType tok;
-} reservedWords[MAXRESERVED] = {
-    {"if", IF},       {"then", THEN},         {"else", ELSE},
-    {"endif", ENDIF}, {"endwhile", ENDWHILE}, {"repeat", REPEAT},
-    {"until", UNTIL}, {"read", READ},         {"write", WRITE},
-    {"while", WHILE}};
+} reservedWords[MAXRESERVED] = {{"else", ELSE},         {"endif", ENDIF},
+                                {"endwhile", ENDWHILE}, {"if", IF},
+                                {"read", READ},         {"repeat", REPEAT},
+                                {"then", THEN},         {"until", UNTIL},
+                                {"while", WHILE},       {"write", WRITE}};
 
 /* lookup an identifier to see if it is a reserved word */
-/* uses linear search */
+/* uses binary search */
 static TokenType reservedLookup(char* word)
 {
-    for (int i = 0; i < MAXRESERVED; i++) {
-        if (!strcmp(word, reservedWords[i].str)) {
-            return reservedWords[i].tok;
+    int start = 0;
+    int end = MAXRESERVED - 1;
+    while (start <= end) {
+        int mid = (start + end) / 2;
+        int comparison = strcmp(word, reservedWords[mid].str);
+        if (comparison == 0) {
+            return reservedWords[mid].tok;
+        }
+        else if (comparison < 0) {
+            end = mid - 1;
+        }
+        else {
+            start = mid + 1;
         }
     }
     return ID;

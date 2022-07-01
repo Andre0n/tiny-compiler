@@ -18,8 +18,8 @@ char tokenString[MAXTOKENLEN + 1]; // Problem with -Wstringop-overflow
 #define BUFLEN 256
 
 static char lineBuf[BUFLEN];  /* holds the current line */
-static int linepos = 0;       /* current position in LineBuf */
-static int bufsize = 0;       /* current size of buffer string */
+static size_t linepos = 0;    /* current position in LineBuf */
+static size_t bufsize = 0;    /* current size of buffer string */
 static bool EOF_flag = false; /* corrects ungetNextChar behavior on EOF */
 
 /* getNextChar fetches the next non-blank character

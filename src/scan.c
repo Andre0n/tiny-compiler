@@ -37,14 +37,10 @@ static int getNextChar(void)
             linepos = 0;
             return lineBuf[linepos++];
         }
-        else {
             EOF_flag = true;
             return EOF;
         }
-    }
-    else {
         return lineBuf[linepos++];
-    }
 }
 
 /* ungetNextChar backtracks one character

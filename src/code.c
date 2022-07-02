@@ -21,8 +21,9 @@ static int highEmitLoc = 0;
  */
 void emitComment(char* c)
 {
-    if (TraceCode)
+    if (TraceCode) {
         fprintf(code, "* %s\n", c);
+    }
 }
 
 /* Procedure emitRO emits a register-only
@@ -36,11 +37,13 @@ void emitComment(char* c)
 void emitRO(char* op, int r, int s, int t, char* c)
 {
     fprintf(code, "%3d:  %5s  %d,%d,%d ", emitLoc++, op, r, s, t);
-    if (TraceCode)
+    if (TraceCode) {
         fprintf(code, "\t%s", c);
+    }
     fprintf(code, "\n");
-    if (highEmitLoc < emitLoc)
+    if (highEmitLoc < emitLoc) {
         highEmitLoc = emitLoc;
+    }
 } /* emitRO */
 
 /* Procedure emitRM emits a register-to-memory
@@ -54,11 +57,13 @@ void emitRO(char* op, int r, int s, int t, char* c)
 void emitRM(char* op, int r, int d, int s, char* c)
 {
     fprintf(code, "%3d:  %5s  %d,%d(%d) ", emitLoc++, op, r, d, s);
-    if (TraceCode)
+    if (TraceCode) {
         fprintf(code, "\t%s", c);
+    }
     fprintf(code, "\n");
-    if (highEmitLoc < emitLoc)
+    if (highEmitLoc < emitLoc) {
         highEmitLoc = emitLoc;
+    }
 } /* emitRM */
 
 /* Function emitSkip skips "howMany" code
@@ -80,8 +85,9 @@ int emitSkip(int howMany)
  */
 void emitBackup(int loc)
 {
-    if (loc > highEmitLoc)
+    if (loc > highEmitLoc) {
         emitComment("BUG in emitBackup");
+    }
     emitLoc = loc;
 } /* emitBackup */
 
@@ -101,7 +107,6 @@ void emitRestore(void) { emitLoc = highEmitLoc; }
  */
 void emitRM_Abs(char* op, int r, int a, char* c)
 {
-    printf("%d\n", r);
     fprintf(code, "%3d:  %5s  %d,%d(%d) ", emitLoc, op, r, a - (emitLoc + 1),
             pc);
     ++emitLoc;

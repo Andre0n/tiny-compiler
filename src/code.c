@@ -69,8 +69,9 @@ int emitSkip(int howMany)
 {
     int i = emitLoc;
     emitLoc += howMany;
-    if (highEmitLoc < emitLoc)
+    if (highEmitLoc < emitLoc) {
         highEmitLoc = emitLoc;
+    }
     return i;
 } /* emitSkip */
 
@@ -100,12 +101,15 @@ void emitRestore(void) { emitLoc = highEmitLoc; }
  */
 void emitRM_Abs(char* op, int r, int a, char* c)
 {
+    printf("%d\n", r);
     fprintf(code, "%3d:  %5s  %d,%d(%d) ", emitLoc, op, r, a - (emitLoc + 1),
             pc);
     ++emitLoc;
-    if (TraceCode)
+    if (TraceCode) {
         fprintf(code, "\t%s", c);
+    }
     fprintf(code, "\n");
-    if (highEmitLoc < emitLoc)
+    if (highEmitLoc < emitLoc) {
         highEmitLoc = emitLoc;
+    }
 } /* emitRM_Abs */

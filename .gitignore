@@ -1,5 +1,8 @@
 # production
 /build
+/extra/tiny-machine/build
+*.tm
+
 
 #misc
 /.vscode

@@ -6,16 +6,10 @@
 /****************************************************/
 
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef TRUE
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
 
 /******* const *******/
 #define IADDR_SIZE 1024 /* increase for large programs */
@@ -80,8 +74,8 @@ typedef struct {
 /******** vars ********/
 int iloc = 0;
 int dloc = 0;
-int traceflag = FALSE;
-int icountflag = FALSE;
+bool traceflag = false;
+bool icountflag = false;
 
 INSTRUCTION iMem[IADDR_SIZE];
 int dMem[DADDR_SIZE];
@@ -115,12 +109,10 @@ int opClass(int c)
     if (c <= opRRLim) {
         return (opclRR);
     }
-    else if (c <= opRMLim) {
+    if (c <= opRMLim) {
         return (opclRM);
     }
-    else {
-        return (opclRA);
-    }
+    return (opclRA);
 } /* opClass */
 
 /********************************************/
@@ -154,29 +146,29 @@ void getCh(void)
 } /* getCh */
 
 /********************************************/
-int nonBlank(void)
+bool nonBlank(void)
 {
     while ((inCol < lineLen) && (in_Line[inCol] == ' ')) {
         inCol++;
     }
     if (inCol < lineLen) {
         ch = in_Line[inCol];
-        return TRUE;
+        return true;
     }
     ch = ' ';
-    return FALSE;
+    return false;
 } /* nonBlank */
 
 /********************************************/
-int getNum(void)
+bool getNum()
 {
 
-    int temp = FALSE;
+    bool temp = false;
     num = 0;
     do {
         int sign = 1;
         while (nonBlank() && ((ch == '+') || (ch == '-'))) {
-            temp = FALSE;
+            temp = false;
             if (ch == '-') {
                 sign = -sign;
             }
@@ -185,7 +177,7 @@ int getNum(void)
         int term = 0;
         nonBlank();
         while (isdigit(ch)) {
-            temp = TRUE;
+            temp = true;
             term = term * 10 + (ch - '0');
             getCh();
         }
@@ -195,9 +187,9 @@ int getNum(void)
 } /* getNum */
 
 /********************************************/
-int getWord(void)
+bool getWord()
 {
-    int temp = FALSE;
+    bool temp = false;
     if (nonBlank()) {
         int length = 0;
         while (isalnum(ch)) {
@@ -213,35 +205,35 @@ int getWord(void)
 } /* getWord */
 
 /********************************************/
-int skipCh(char c)
+bool skipCh(char c)
 {
-    int temp = FALSE;
+    bool temp = false;
     if (nonBlank() && (ch == c)) {
         getCh();
-        temp = TRUE;
+        temp = true;
     }
     return temp;
 } /* skipCh */
 
 /********************************************/
-int atEOL(void) { return (!nonBlank()); } /* atEOL */
+bool atEOL(void) { return (!nonBlank()); } /* atEOL */
 
 /********************************************/
-int error(char* msg, int lineNo, int instNo)
+bool error(char* msg, int lineNo, int instNo)
 {
     printf("Line %d", lineNo);
     if (instNo >= 0) {
         printf(" (Instruction %d)", instNo);
     }
     printf("   %s\n", msg);
-    return FALSE;
+    return false;
 } /* error */
 
 /********************************************/
-int readInstructions(void)
+bool readInstructions(void)
 {
     OPCODE op;
-    int arg1 = 0, arg2 = 0, arg3 = 0;
+    int arg1, arg2, arg3;
     int loc, regNo, lineNo;
     for (regNo = 0; regNo < NO_REGS; regNo++) {
         reg[regNo] = 0;
@@ -341,16 +333,16 @@ int readInstructions(void)
             iMem[loc].iarg3 = arg3;
         }
     }
-    return TRUE;
+    return true;
 } /* readInstructions */
 
 /********************************************/
 STEPRESULT stepTM(void)
 {
     INSTRUCTION currentinstruction;
-    int pc = 0;
-    int r = 0, s = 0, t = 0, m = 0;
-    int ok = 0;
+    int pc;
+    int r, s, t, m;
+    int ok;
 
     pc = reg[PC_REG];
     if ((pc < 0) || (pc > IADDR_SIZE - 1)) {
@@ -395,7 +387,7 @@ STEPRESULT stepTM(void)
         /***********************************/
         do {
             printf("Enter value for IN instruction: ");
-            fflush(stdin); // May can´t get errors on non linux systems
+            fflush(stdin);
             fflush(stdout);
             fgets(in_Line, sizeof(in_Line), stdin);
             lineLen = strlen(in_Line);
@@ -485,7 +477,7 @@ STEPRESULT stepTM(void)
 } /* stepTM */
 
 /********************************************/
-int doCommand(void)
+bool doCommand(void)
 {
     char cmd;
     int stepcnt = 0, i;
@@ -637,7 +629,7 @@ int doCommand(void)
         break;
 
     case 'q':
-        return FALSE; /* break; */
+        return false; /* break; */
 
     default:
         printf("Command %c unknown.\n", cmd);
@@ -655,8 +647,9 @@ int doCommand(void)
                 stepResult = stepTM();
                 stepcnt++;
             }
-            if (icountflag)
+            if (icountflag) {
                 printf("Number of instructions executed = %d\n", stepcnt);
+            }
         }
         else {
             while ((stepcnt > 0) && (stepResult == srOKAY)) {
@@ -670,18 +663,18 @@ int doCommand(void)
         }
         printf("%s\n", stepResultTab[stepResult]);
     }
-    return TRUE;
+    return true;
 } /* doCommand */
 
 /********************************************/
 /* E X E C U T I O N   B E G I N S   H E R E */
 /********************************************/
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
     if (argc != 2) {
         printf("usage: %s <filename>\n", argv[0]);
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     strcpy(pgmName, argv[1]);
     if (strchr(pgmName, '.') == NULL) {
@@ -690,12 +683,12 @@ int main(int argc, char** argv)
     pgm = fopen(pgmName, "r");
     if (pgm == NULL) {
         printf("file '%s' not found\n", pgmName);
-        exit(EXIT_FAILURE);
+        exit(1);
     }
 
     /* read the program */
     if (!readInstructions()) {
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     /* switch input file to terminal */
     /* reset( input ); */
@@ -705,5 +698,5 @@ int main(int argc, char** argv)
         done = !doCommand();
     } while (!done);
     printf("Simulation done.\n");
-    return EXIT_SUCCESS;
+    return 0;
 }

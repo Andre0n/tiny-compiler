@@ -22,12 +22,13 @@ static void cGen(TreeNode* tree);
 static void genStmt(TreeNode* tree)
 {
     TreeNode *p1, *p2, *p3, *curCase;
-    int currentLoc;
+    int savedLoc1, savedLoc2, currentLoc;
     int loc;
     switch (tree->kind.stmt) {
     case SwitchK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> switch");
+        }
         p1 = tree->child[0];
         p2 = tree->child[1];
         // get the variable
@@ -38,8 +39,9 @@ static void genStmt(TreeNode* tree)
     case CaseK:
         curCase = tree;
 
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> ");
+        }
         emitRM("LDA", ac1, 0, ac, "tentando colocar o valor de ac em ac1");
         // loop que gera os cases
         do {
@@ -67,18 +69,19 @@ static void genStmt(TreeNode* tree)
 
         break; /* switch_k */
     case IfK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> if");
+        }
         p1 = tree->child[0];
         p2 = tree->child[1];
         p3 = tree->child[2];
         /* generate code for test expression */
         cGen(p1);
-        int savedLoc1 = emitSkip(1);
+        savedLoc1 = emitSkip(1);
         emitComment("if: jump to else belongs here");
         /* recurse on then part */
         cGen(p2);
-        int savedLoc2 = emitSkip(1);
+        savedLoc2 = emitSkip(1);
         emitComment("if: jump to end belongs here");
         currentLoc = emitSkip(0);
         emitBackup(savedLoc1);
@@ -90,13 +93,15 @@ static void genStmt(TreeNode* tree)
         emitBackup(savedLoc2);
         emitRM_Abs("LDA", pc, currentLoc, "jmp to end");
         emitRestore();
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- if");
+        }
         break; /* if_k */
 
     case RepeatK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> repeat");
+        }
         p1 = tree->child[0];
         p2 = tree->child[1];
         savedLoc1 = emitSkip(0);
@@ -106,8 +111,9 @@ static void genStmt(TreeNode* tree)
         /* generate code for test */
         cGen(p2);
         emitRM_Abs("JEQ", ac, savedLoc1, "repeat: jmp back to body");
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- repeat");
+        }
         break; /* repeat */
 
     case WhileK:
@@ -136,15 +142,17 @@ static void genStmt(TreeNode* tree)
         break; /* while */
 
     case AssignK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> assign");
+        }
         /* generate code for rhs */
         cGen(tree->child[0]);
         /* now store value */
         loc = st_lookup(tree->attr.name);
         emitRM("ST", ac, loc, gp, "assign: store value");
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- assign");
+        }
         break; /* assign_k */
 
     case ReadK:
@@ -171,26 +179,31 @@ static void genExp(TreeNode* tree)
     switch (tree->kind.exp) {
 
     case ConstK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> Const");
+        }
         /* gen code to load integer constant using LDC */
         emitRM("LDC", ac, tree->attr.val, 0, "load const");
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- Const");
+        }
         break; /* ConstK */
 
     case IdK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> Id");
+        }
         loc = st_lookup(tree->attr.name);
         emitRM("LD", ac, loc, gp, "load id value");
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- Id");
+        }
         break; /* IdK */
 
     case OpK:
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("-> Op");
+        }
         p1 = tree->child[0];
         p2 = tree->child[1];
         /* gen code for ac = left arg */
@@ -232,8 +245,9 @@ static void genExp(TreeNode* tree)
             emitComment("BUG: Unknown operator");
             break;
         } /* case op */
-        if (TraceCode)
+        if (TraceCode) {
             emitComment("<- Op");
+        }
         break; /* OpK */
 
     default:
@@ -272,7 +286,7 @@ static void cGen(TreeNode* tree)
  */
 void codeGen(TreeNode* syntaxTree, char* codefile)
 {
-    char* s = malloc(strlen(codefile) + 7);
+    char* s = calloc((strlen(codefile) + 7), sizeof(char));
     strcpy(s, "File: ");
     strcat(s, codefile);
     emitComment("TINY Compilation to TM Code");

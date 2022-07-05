@@ -9,6 +9,6 @@ if 0 < x then { don't compute if x <= 0 }
   repeat
     fact := fact * x;
     x := x - 1;
-  until x = 0
+  until x = 0;
   write fact;  { output factorial of x }
 endif

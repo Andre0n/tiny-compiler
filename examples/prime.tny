@@ -1,0 +1,19 @@
+{
+    This program checks if a given number is prime.
+    The program prints 1 if the number is prime and 0 otherwise.
+}
+read x;
+prime := 1;
+if x < 2 then
+    prime := 0;
+else
+    i := 2;
+    while i < x / 2 + 1
+        r := x - ( (x/i) * i );
+        if r = 0 then
+            prime := 0;
+        endif
+        i := i + 1;
+    endwhile
+endif
+write prime;

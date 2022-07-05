@@ -136,6 +136,7 @@ TreeNode* repeat_stmt()
     stmt->child[0] = stmt_sequence();
     match(UNTIL);
     stmt->child[1] = expr();
+    match(SEMI);
     return stmt;
 }
 

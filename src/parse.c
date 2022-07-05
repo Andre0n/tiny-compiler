@@ -56,24 +56,18 @@ TreeNode* stmt_sequence()
     TreeNode* t = statement();
     TreeNode* p = t;
     while (!isEnd()) {
-        match(SEMI);
-        // Without this check the program skips the current token and may return
-        // an invalid statement or a EOF causing an `unexpected error`.
-        if (!isEnd()) {
-            TreeNode* q;
-            q = statement();
-            if (q != NULL) {
-                if (t == NULL) {
-                    t = p = q;
-                }
-                else {
-                    p->sibling = q;
-                    p = q;
-                }
+        TreeNode* q;
+        q = statement();
+        if (q != NULL) {
+            if (t == NULL) {
+                t = p = q;
+            }
+            else {
+                p->sibling = q;
+                p = q;
             }
         }
     }
-
     return t;
 }
 
@@ -99,10 +93,8 @@ TreeNode* statement()
     case WHILE:
         t = while_stmt();
         break;
-    case ENDFILE:
-        break;
     default:
-        syntaxError("Unexpected token ->");
+        syntaxError("Unexpected token (statement) -> ");
         printToken(currentToken, tokenString);
         fprintf(listing, "\n");
         currentToken = getToken();
@@ -170,6 +162,7 @@ TreeNode* assign_stmt()
     if (stmt != NULL) {
         stmt->child[0] = expr();
     }
+    match(SEMI);
     return stmt;
 }
 
@@ -181,6 +174,7 @@ TreeNode* read_stmt()
         stmt->attr.name = copyString(tokenString);
     }
     match(ID);
+    match(SEMI);
     return stmt;
 }
 
@@ -191,6 +185,7 @@ TreeNode* write_stmt()
     if (stmt != NULL) {
         stmt->child[0] = expr();
     }
+    match(SEMI);
     return stmt;
 }
 
@@ -266,8 +261,6 @@ TreeNode* factor()
         match(LPAREN);
         t = expr();
         match(RPAREN);
-        break;
-    case ENDFILE:
         break;
     default:
         syntaxError("unexpected token -> ");

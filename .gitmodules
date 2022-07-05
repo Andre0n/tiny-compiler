@@ -1,0 +1,3 @@
+[submodule "extra/tiny-syntax-highlight"]
+	path = extra/tiny-syntax-highlight
+	url = https://github.com/Andre0n/tiny-syntax-highlight.git

@@ -7,7 +7,6 @@
 
 #ifndef _CGEN_H_
 #define _CGEN_H_
-#include "cgen.h"
 #include "code.h"
 #include "globals.h"
 #include "symtab.h"

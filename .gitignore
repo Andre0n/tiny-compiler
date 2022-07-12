@@ -3,6 +3,9 @@
 /extra/tiny-machine/build
 *.tm
 
-
 #misc
 /.vscode
+
+#tests
+examples/tests_base
+run_tests.py
